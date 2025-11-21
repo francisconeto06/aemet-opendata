@@ -11,7 +11,7 @@ Os dados utilizados são obtidos através da plataforma AEMET OpenData, que disp
 
 - O que estes scripts fazem
 
-Os scripts em Python permitem automatizar a obtenção das seguintes variáveis:
+Os scripts em Python 3.13.9 permitem automatizar a obtenção das seguintes variáveis:
 
 -> Radiação Global (GL) em 10 * kj/m²
 
