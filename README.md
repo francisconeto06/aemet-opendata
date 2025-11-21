@@ -37,13 +37,42 @@ Os scripts em Python 3.13.9 permitem automatizar a obtenção das seguintes vari
 
 - Primeiro Passo: Criar o arquivo key.txt
 
-Se clonar este projeto, este arquivo já está criado, sendo assim, não necessitando ser criado novamente. Contudo, antes de usar os scripts, o usuário deve gerar uma chave (key) no seguinte link: https://opendata.aemet.es/centrodedescargas/inicio e seguir as orientações do site. Após isso, pode colar na variável "key" do arquivo .txt disponibilizado neste projeto.
+Se você fizer o clone deste projeto, o arquivo key.txt já estará disponível, portanto não será necessário criá-lo novamente.
+
+Contudo, antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link:
+https://opendata.aemet.es/centrodedescargas/inicio
+
+Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt fornecido no projeto.
 
 - Segundo Passo: Criar o arquivo todas_estacoes.csv
 
-Mesmo caso do anterior, alguns scripts usa esse arquivo para gerar o arquivo de saída com as informações do código da estação, nome, latitude, longitudo e altitude. Dessa forma, se o usuário fazer o clone deste projeto, o mesmo já estará criado. Caso contrário, deve primeiro executar o código *inventario_stations.py*, onde será criado o arquivo com todas as estações disponibilidado na API da AEMET.
+Assim como no passo anterior, este arquivo já está incluído no repositório caso você tenha feito o clone do projeto.
 
-- Terceiro Passo: Executar os download
+Alguns scripts utilizam este arquivo para gerar as saídas contendo código da estação, nome, latitude, longitude e altitude.
 
-Agora seu diretório está preparado para realizar os download. Neste projeto, tem três principais opções para realizar o download de variáveis de radiação, são elas: Baixar a estatística mensal da Radiação Global (GL) e Insolação (Sol); baixar estatísticas diárias históricas de Insolação e dados do último dia de Radiação Global, Radiação Difusa e Radiação Direta. A seguir será descrito cada script .py
+Caso você não tenha o arquivo, basta executar o script inventario_stations.py. Ele fará a requisição à API da AEMET e criará automaticamente o arquivo todas_estacoes.csv com todas as estações disponíveis.
+
+- Terceiro Passo: Executar os downloads
+
+Agora o diretório já está preparado para realizar os downloads.
+
+Este projeto oferece três principais opções para baixar dados de radiação:
+
+-> Estatística mensal de
+
+-> Radiação Global (GL)
+
+-> Insolação (Sol)
+
+Estatísticas diárias históricas de Insolação
+
+-> Dados do último dia de
+
+-> Radiação Global
+
+-> Radiação Difusa
+
+-> Radiação Direta
+
+A seguir, cada script .py será descrito detalhadamente.
 
