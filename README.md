@@ -76,5 +76,5 @@ Dados do último dia de
 
 -> Radiação Direta
 
-A seguir, cada script .py será descrito detalhadamente.
+A seguir, será detalhado como executar cada script .py
 
