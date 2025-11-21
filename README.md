@@ -13,11 +13,22 @@ Os dados utilizados são obtidos através da plataforma AEMET OpenData, que disp
 
 Os scripts em Python permitem automatizar a obtenção das seguintes variáveis:
 
--> Radiação Global (GL) em 10* kj/m²
+-> Radiação Global (GL) em 10 * kj/m²
 
--> Radiação Difusa (DF) em 10* kj/m²
+-> Radiação Difusa (DF) em 10 * kj/m²
 
--> Radiação Direta (DT) em 10* kj/m²
+-> Radiação Direta (DT) em 10 * kj/m²
 
 -> Insolação (INSO) em horas
 
+# Bibliotecas
+
+- [datetime](https://docs.python.org/3/library/datetime.html)
+- [argparse](https://docs.python.org/3/library/argparse.html)
+- [requests](https://requests.readthedocs.io/en/latest/)
+- [pandas](https://pandas.pydata.org/docs/)
+- [time](https://docs.python.org/3/library/time.html)
+- [json](https://docs.python.org/3/library/json.html)
+- [time](https://docs.python.org/3/library/time.html)
+- [sys](https://docs.python.org/3/library/sys.html)
+- [os](https://docs.python.org/3/library/os.html)
