@@ -1,0 +1,9 @@
+############################################################
+
+# Obter a Key acessar o 
+# site: https://opendata.aemet.es/centrodedescargas/inicio
+# Na var key trocar somente o código da chave
+
+############################################################
+
+key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcmFuY2lzY28ubmV0b0BpbnBlLmJyIiwianRpIjoiNzczMWMyZTctZTIyNS00NGU3LWFiOTgtOTM3ZmU3ZDFiMDg4IiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3NjMwNTU3NDYsInVzZXJJZCI6Ijc3MzFjMmU3LWUyMjUtNDRlNy1hYjk4LTkzN2ZlN2QxYjA4OCIsInJvbGUiOiIifQ.VOmzWqIqlaJfGiEc8RjAi9L7kpNnCIpBI1eILFDZdMM"
