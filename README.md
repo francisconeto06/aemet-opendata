@@ -56,17 +56,19 @@ Caso você não tenha o arquivo, basta executar o script inventario_stations.py.
 
 Agora o diretório já está preparado para realizar os downloads.
 
-Este projeto oferece três principais opções para baixar dados de radiação:
+Este projeto oferece três principais opções para baixar dados de radiação: 
 
--> Estatística mensal de
+Estatística mensal:
 
 -> Radiação Global (GL)
 
 -> Insolação (Sol)
 
+**OBS:** *Obdecer a regra da API da AEMET, neste caso, eles só liberam baixar 36 meses de uma única vez.*
+
 Estatísticas diárias históricas de Insolação
 
--> Dados do último dia de
+Dados do último dia de
 
 -> Radiação Global
 
