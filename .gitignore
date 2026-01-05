@@ -4,6 +4,7 @@ __pycache__/
 
 # Dados gerados
 dataset_daily/
+real_time/
 
 # Chaves e segredos
 key.txt
