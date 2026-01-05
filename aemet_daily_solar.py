@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Bibliotecas necessárias
+
 import argparse
 import os
 import time

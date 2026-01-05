@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Funções
 
 def gms_to_decimal(gms):
