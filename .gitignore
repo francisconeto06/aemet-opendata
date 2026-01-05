@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# Dados gerados
+dataset_daily/
+
+# Chaves e segredos
+key.txt

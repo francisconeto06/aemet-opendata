@@ -1,7 +1,0 @@
-############################################################
-#               Obter a Key acessar o                      #
-# site: https://opendata.aemet.es/centrodedescargas/inicio #
-#       Na var key trocar somente o código da chave        #
-############################################################
-
-key = " "
