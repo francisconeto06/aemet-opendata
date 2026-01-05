@@ -2,6 +2,7 @@
 
 # Biliotecas necessárias
 import os
+
 import pandas as pd
 from tqdm import tqdm
 
@@ -18,7 +19,8 @@ for a in arquivos:
 print("\n🚀 Iniciando processamento...\n")
 
 # Barra de progresso externa (por arquivo consolidado)
-for arquivo in tqdm(arquivos, desc="Processando arquivos consolidados", unit="arquivo"):
+for arquivo in tqdm(arquivos, desc="Processando arquivos consolidados",
+                    unit="arquivo"):
 
     path_arquivo = os.path.join(base_input_dir, arquivo)
 
@@ -26,9 +28,7 @@ for arquivo in tqdm(arquivos, desc="Processando arquivos consolidados", unit="ar
     df = pd.read_csv(path_arquivo)
 
     # Garantir coluna data como datetime
-    #df["data"] = pd.to_datetime(df["data"])
     df["data"] = pd.to_datetime(df["data"], format="ISO8601", errors="coerce")
-
 
     # Identificar ano automaticamente
     ano = df["data"].dt.year.unique()[0]
@@ -38,10 +38,10 @@ for arquivo in tqdm(arquivos, desc="Processando arquivos consolidados", unit="ar
     os.makedirs(output_dir, exist_ok=True)
 
     # Barra de progresso interna (por estação)
-    #grouped = df.groupby("od")
     grouped = df.groupby("cod")
 
-    for od, df_est in tqdm(grouped, desc=f" - Estações ({arquivo})", leave=False, unit="est"):
+    for od, df_est in tqdm(grouped, desc=f" - Estações ({arquivo})",
+                           leave=False, unit="est"):
 
         nome_estacao = df_est["nome"].iloc[0]
 

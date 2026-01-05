@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-
-import requests
-import pandas as pd
-import time
+# Bibliotecas necessárias
 import argparse
-from datetime import datetime, timedelta
-from utils import gms_to_decimal
 import os
+import time
+from datetime import datetime, timedelta
+
+import pandas as pd
+import requests
+
+from utils import gms_to_decimal
 
 # =========================================================
 # Criando a pasta dataset_daily
@@ -15,13 +17,15 @@ import os
 # cria pasta se não existir
 os.makedirs("dataset_daily", exist_ok=True)
 
+
 # =========================================================
 # FUNÇÃO: BAIXAR UM PERÍODO
 # =========================================================
 def baixar_periodo(datai, dataf, api_key, tentativas=5):
     url = (
-        f"https://opendata.aemet.es/opendata/api/valores/climatologicos/diarios/"
-        f"datos/fechaini/{datai}T00%3A00%3A00UTC/fechafin/{dataf}T00%3A00%3A00UTC/todasestaciones"
+        f"https://opendata.aemet.es/opendata/api/valores/climatologicos/"
+        f"diarios/datos/fechaini/{datai}T00%3A00%3A00UTC/fechafin/"
+        f"{dataf}T00%3A00%3A00UTC/todasestaciones"
     )
 
     headers = {"cache-control": "no-cache"}
@@ -45,7 +49,8 @@ def baixar_periodo(datai, dataf, api_key, tentativas=5):
                 return None
 
         else:
-            print(f"❌ Erro HTTP {resp.status_code} — tentativa {tentativa}/{tentativas}")
+            print(f"""❌ Erro HTTP {resp.status_code} — tentativa
+                {tentativa}/{tentativas}""")
             time.sleep(10)
 
     print("⚠ Máximo de tentativas atingido.")
@@ -69,6 +74,7 @@ def extrair_filtrados(lista):
             })
     return filtrados
 
+
 # =========================================================
 # FUNÇÃO: MESCLAR LAT/LON
 # =========================================================
@@ -81,7 +87,8 @@ def mesclar_lat_lon(df):
         how="left"
     ).drop(columns=["indicativo"])
 
-    df_final.rename(columns={"latitud": "lat", "longitud": "lon"}, inplace=True)
+    df_final.rename(columns={"latitud": "lat", "longitud": "lon"},
+                    inplace=True)
 
     df_final["lat"] = df_final["lat"].apply(gms_to_decimal)
     df_final["lon"] = df_final["lon"].apply(gms_to_decimal)
@@ -105,12 +112,70 @@ def salvar_incremental(df_final, output):
     df_concat.to_csv(output, index=False)
 
 
-# =========================================================
-# SCRIPT PRINCIPAL
-# =========================================================
-if __name__ == "__main__":
+def carregar_api_key():
+    with open("key.txt", "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip().startswith("key ="):
+                return line.split("=", 1)[1].strip().strip('"')
+    raise RuntimeError("ERRO: não encontrei chave em key.txt")
 
-    parser = argparse.ArgumentParser(description="Downloader de insolação diária AEMET")
+
+def configurar_datas(args):
+    data_atual = (
+        datetime(args.ano, 1, 1)
+        if args.datai is None
+        else datetime.fromisoformat(args.datai)
+    )
+
+    data_limite = (
+        datetime(args.ano, 12, 31)
+        if args.dataf is None
+        else datetime.fromisoformat(args.dataf)
+    )
+
+    return data_atual, data_limite
+
+
+def imprimir_cabecalho(args, data_atual, data_limite):
+    print("=========================================")
+    print(f" Baixando dados do ano {args.ano}")
+    print(f" Período: {data_atual.date()} → {data_limite.date()}")
+    print(f" Janela: {args.janela} dias")
+    print("=========================================\n")
+
+
+def processar_janela(data_atual, data_limite, args, api_key):
+    datai = data_atual.strftime("%Y-%m-%d")
+
+    dataf_raw = data_atual + timedelta(days=args.janela - 1)
+    dataf = min(dataf_raw, data_limite).strftime("%Y-%m-%d")
+
+    print(f"\n➡ Baixando período {datai} → {dataf}")
+
+    dados = baixar_periodo(datai, dataf, api_key)
+
+    if dados is None:
+        print(f"⚠ Falha no período {datai} → {dataf}. Pulando...")
+        return data_atual + timedelta(days=args.janela)
+
+    filtrados = extrair_filtrados(dados)
+
+    if not filtrados:
+        print(f"⚠ Nenhum dado no período {datai} → {dataf}")
+        return data_atual + timedelta(days=args.janela)
+
+    df = pd.DataFrame(filtrados)
+    df["data"] = pd.to_datetime(df["data"])
+    df = df.sort_values(by=["cod", "data"])
+
+    df_final = mesclar_lat_lon(df)
+    salvar_incremental(df_final, args.saida)
+
+    return data_atual + timedelta(days=args.janela)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Insolacao diária AEMET")
 
     parser.add_argument("--ano", type=int, default=2024,
                         help="Ano a processar (default: 2024)")
@@ -125,78 +190,28 @@ if __name__ == "__main__":
         "--saida",
         type=str,
         default=None,
-        help="Arquivo de saída (default: dataset_daily/insolacao_diaria_ANO.csv)"
+        help="""Arquivo de saída
+        (default: dataset_daily/insolacao_diaria_ANO.csv)"""
     )
 
     args = parser.parse_args()
-    
-    # cria nome automático se usuário não passar --saida
+
     if args.saida is None:
         args.saida = f"dataset_daily/insolacao_diaria_{args.ano}.csv"
 
-    # Lê chave da API
-    api_key = None
-    with open("key.txt", "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("key ="):
-                _, valor = line.split("=", 1)
-                api_key = valor.strip().strip('"')
+    api_key = carregar_api_key()
+    data_atual, data_limite = configurar_datas(args)
 
-    if api_key is None:
-        print("ERRO: não encontrei chave em key.txt")
-        exit()
-
-    # Controle de datas
-    if args.datai is None:
-        data_atual = datetime(args.ano, 1, 1)
-    else:
-        data_atual = datetime.fromisoformat(args.datai)
-
-    if args.dataf is None:
-        data_limite = datetime(args.ano, 12, 31)
-    else:
-        data_limite = datetime.fromisoformat(args.dataf)
-
-    print("=========================================")
-    print(f" Baixando dados do ano {args.ano}")
-    print(f" Período: {data_atual.date()} → {data_limite.date()}")
-    print(f" Janela: {args.janela} dias")
-    print("=========================================\n")
+    imprimir_cabecalho(args, data_atual, data_limite)
 
     while data_atual <= data_limite:
-
-        datai = data_atual.strftime("%Y-%m-%d")
-        dataf_raw = data_atual + timedelta(days=args.janela - 1)
-        dataf = min(dataf_raw, data_limite).strftime("%Y-%m-%d")
-
-        print(f"\n➡ Baixando período {datai} → {dataf}")
-
-        dados = baixar_periodo(datai, dataf, api_key)
-
-        if dados is None:
-            print(f"⚠ Falha no período {datai} → {dataf}. Pulando...")
-            data_atual += timedelta(days=args.janela)
-            continue
-
-        filtrados = extrair_filtrados(dados)
-        
-
-        if not filtrados:
-            print(f"⚠ Nenhum dado no período {datai} → {dataf}")
-            data_atual += timedelta(days=args.janela)
-            continue
-
-        df = pd.DataFrame(filtrados)
-        df["data"] = pd.to_datetime(df["data"])
-        df = df.sort_values(by=["cod", "data"])
-
-        df_final = mesclar_lat_lon(df)
-        salvar_incremental(df_final, args.saida)
-
-        data_atual += timedelta(days=args.janela)
+        data_atual = processar_janela(
+            data_atual, data_limite, args, api_key
+        )
 
     print("\n✔ FINALIZADO!")
     print(f"Arquivo salvo em: {args.saida}")
 
 
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,15 @@
 # Bibliotecas
 
-import requests
 import pandas as pd
+import requests
 
 # url
-url = "https://opendata.aemet.es/opendata/api/valores/climatologicos/inventarioestaciones/todasestaciones/"
+url = (
+    "https://opendata.aemet.es/opendata/api/valores/"
+    "climatologicos/inventarioestaciones/todasestaciones/"
+)
 
+print(url)
 # Lendo a key do arquivo
 api_key = None
 
