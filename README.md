@@ -40,7 +40,8 @@ Os scripts em Python 3.13.9 permitem automatizar a obtenção das seguintes vari
 Antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link: https://opendata.aemet.es/centrodedescargas/inicio
 
 Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt criado pelo usuário.
-Anteção: Colar entre aspas a chave na variável key nesse formato:
+
+Atenção: Colar entre aspas a chave na variável key nesse formato:
 
 key = " "
 
