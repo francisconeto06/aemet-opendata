@@ -1,10 +1,12 @@
 # Bibliotecas necessárias
 
-import requests
-import time
 import os
-import pandas as pd
+import time
 from datetime import datetime
+
+import pandas as pd
+import requests
+
 from utils import gms_to_decimal
 
 # -------------------------------------------------------------
