@@ -1,6 +1,7 @@
+# Bibliotecas necessárias
+
 import requests
 import time
-import json
 import os
 import pandas as pd
 from datetime import datetime
@@ -14,7 +15,6 @@ api_key = None
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 KEY_PATH = os.path.join(BASE_DIR, "key.txt")
 
-#with open("key.txt", "r", encoding="utf-8") as f:
 with open(KEY_PATH, "r", encoding="utf-8") as f:
     for line in f:
         line = line.strip()
@@ -33,6 +33,7 @@ url = "https://opendata.aemet.es/opendata/api/red/especial/radiacion"
 headers = {"cache-control": "no-cache"}
 querystring = {"api_key": api_key}
 
+
 # -------------------------------------------------------------
 # 3. Requisição com retry
 # -------------------------------------------------------------
@@ -50,7 +51,10 @@ def request_with_retries():
                 return controle["datos"]
 
         tentativas += 1
-        print(f"Falha ({response.status_code}), tentativa {tentativas}/{max_tentativas}")
+        print(
+            f"Falha ({response.status_code}), "
+            f"tentativa {tentativas}/{max_tentativas}"
+        )
 
         if tentativas < max_tentativas:
             print("Aguardando 90s…")
@@ -58,6 +62,7 @@ def request_with_retries():
 
     print("❌ Falha após 3 tentativas.")
     return None
+
 
 # -------------------------------------------------------------
 # 4. Obter URL de dados
@@ -72,7 +77,7 @@ raw_text = response_dados.text
 # -------------------------------------------------------------
 # 5. Preparar linhas
 # -------------------------------------------------------------
-linhas = [l.strip() for l in raw_text.split("\n") if l.strip()]
+linhas = [line.strip() for line in raw_text.split("\n") if line.strip()]
 
 data_bruta = linhas[1].replace('"', "")
 data_fmt = datetime.strptime(data_bruta, "%d-%m-%y").strftime("%Y%m%d")
@@ -91,6 +96,7 @@ df_meta_idx = df_meta.set_index("indicativo", drop=False)
 # 7. Criar pasta de saída
 # -------------------------------------------------------------
 os.makedirs(BASE_DIR + "/real_time", exist_ok=True)
+
 
 # -------------------------------------------------------------
 # 8. Função para extrair bloco baseado no marcador "Tipo"
@@ -119,6 +125,7 @@ def extrair_bloco(cols, pos_tipo):
 
     return horas, suma, i
 
+
 # -------------------------------------------------------------
 # 9. Processar cada estação
 # -------------------------------------------------------------
@@ -129,10 +136,12 @@ for linha in linhas_estacoes:
     indicativo = cols[1]
 
     # detecta posições dos marcadores "Tipo"
-    pos_tipos = [i for i, v in enumerate(cols) if v == "GL" or v == "DF" or v == "DT"]
+    pos_tipos = [i for i,
+                 v in enumerate(cols) if v == "GL" or v == "DF" or v == "DT"]
 
     if len(pos_tipos) < 3:
-        print(f"⚠ Estação {nome} ({indicativo}) tem menos blocos que o esperado. Ignorada.")
+        print(f"""⚠ Estação {nome} ({indicativo}) tem menos blocos que o
+            esperado. Ignorada.""")
         continue
 
     pos_GL, pos_DF, pos_DT = pos_tipos[:3]
@@ -144,10 +153,11 @@ for linha in linhas_estacoes:
 
     # Garantir tamanho correto (evita erro do DataFrame)
     if not (len(GL_horas) == len(DF_horas) == len(DT_horas) == 16):
-        print(f"⚠ Tamanhos inconsistentes na estação {nome}. Ajustado automaticamente.")
-        GL_horas = (GL_horas + [None]*16)[:16]
-        DF_horas = (DF_horas + [None]*16)[:16]
-        DT_horas = (DT_horas + [None]*16)[:16]
+        print(f"""⚠ Tamanhos inconsistentes na estação {nome}.
+            Ajustado automaticamente.""")
+        GL_horas = (GL_horas + [None] * 16)[:16]
+        DF_horas = (DF_horas + [None] * 16)[:16]
+        DT_horas = (DT_horas + [None] * 16)[:16]
 
     # Criar DataFrame final
     df = pd.DataFrame({
