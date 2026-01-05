@@ -39,19 +39,10 @@ Os scripts em Python 3.13.9 permitem automatizar a obtenção das seguintes vari
 
 Antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link: https://opendata.aemet.es/centrodedescargas/inicio
 
-Após, colar em um arquivo .txt com seguinte estrutura:
+Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt criado pelo usuário.
+Anteção: Colar entre aspas a chave na variável key nesse formato:
 
-############################################################
-#               Obter a Key acessar o                      #
-# site: https://opendata.aemet.es/centrodedescargas/inicio #
-#       Na var key trocar somente o código da chave        #
-############################################################
-
-key = " " 
-
-Entre aspas tem que está contido a chave que o sistema da AEMET enviará por e-mail cadastrado.
-
-Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt fornecido no projeto.
+key = " "
 
 - Segundo Passo: Criar o arquivo todas_estacoes.csv
 
