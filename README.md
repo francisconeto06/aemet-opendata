@@ -1,116 +1,220 @@
-# AEMET-OPENDATA
+# 🌞 AEMET-OPENDATA
 
-Projeto desenvolvido para automatizar o download e a coleta de dados de radiação solar das estações radiométricas operadas pela Agência Estatal de Meteorologia da Espanha (AEMET).
+Projeto desenvolvido para **automatizar o download, organização e processamento de dados de radiação solar e insolação** das estações radiométricas operadas pela **Agência Estatal de Meteorologia da Espanha (AEMET)**, utilizando o serviço **OpenData** oficial.
 
-# Estrutura do Projeto
+---
 
+## 📌 Funcionalidades
+
+O projeto permite a obtenção automatizada das seguintes variáveis meteorológicas:
+
+* **Radiação Global (GL)** — em `10 × kJ/m²`
+* **Radiação Difusa (DF)** — em `10 × kJ/m²`
+* **Radiação Direta (DT)** — em `10 × kJ/m²`
+* **Insolação (Sol)** — em horas
+
+Os dados podem ser obtidos tanto em **tempo quase real** quanto em **séries históricas consolidadas**.
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
 aemet-opendata/
-├── aemet_insolation_history.py     # Algoritmo para baixar histórico diário de insolação da AEMET para todas as estações.
-├── aemet_insolation_pipeline.py    # Organiza os dados baixados de Insolação diária em Horas
-├── aemet_real_time_radiation.py    # Realiza download de Radiação Global, Direta e Difusa do dia anterior (disponível pela API)
-├── aemet_inventory_stations.py     # Constrói csv com todas informações das estações disponíveis via API
-├── utils.py                        # Contém funções e listas auxiliares
-├── todas_estacoes.csv              # Inventário de todas estações disponível via API
-├── aemet_metadata_real_time.csv    # Inventário que disponibiliza informações das estações "real-time" de radiação
-└── README.md                       # Este arquivo
+├── aemet_insolation_history.py     # Download do histórico diário de insolação para todas as estações
+├── aemet_insolation_pipeline.py    # Pipeline de organização dos dados de insolação diária (horas)
+├── aemet_real_time_radiation.py    # Download diário (D-1) de radiação Global, Direta e Difusa via API
+├── aemet_inventory_stations.py     # Geração do inventário completo de estações disponíveis na API
+├── utils.py                        # Funções auxiliares e listas utilitárias
+├── todas_estacoes.csv              # Inventário de todas as estações disponíveis via API
+├── aemet_metadata_real_time.csv    # Inventário das estações com dados de radiação em tempo real
+└── README.md                       # Documentação do projeto
+```
 
-# Instalação
+---
 
-1) Realize o clone ou download deste projeto;
-2) Este projeto foi testado usando Anaconda (conda 25.5.1);
-3) Foi utilizado o Python 3.13.5
+## ⚙️ Instalação
 
-- Exemplo de criação de ambiente:
+### Pré-requisitos
 
->> conda create -n aemet-opendata python=3.13.5 pandas tqdm requests
->> conda activate aemet-opendata
+* **Anaconda / Miniconda** (testado com `conda 25.5.1`)
+* **Python 3.13.5**
 
-# Bibliotecas
+### Clonando o repositório
 
-Bibliotecas que os scripts fazem uso. Mas, se realizou a criação do ambiente conda da forma anterior, essas bibliotecas estaram instaladas. 
+```bash
+git clone https://github.com/francisconeto06/aemet-opendata.git
+cd aemet-opendata
+```
 
-- [datetime](https://docs.python.org/3/library/datetime.html)
-- [argparse](https://docs.python.org/3/library/argparse.html)
-- [requests](https://requests.readthedocs.io/en/latest/)
-- [pandas](https://pandas.pydata.org/docs/)
-- [time](https://docs.python.org/3/library/time.html)
-- [json](https://docs.python.org/3/library/json.html)
-- [time](https://docs.python.org/3/library/time.html)
-- [sys](https://docs.python.org/3/library/sys.html)
-- [os](https://docs.python.org/3/library/os.html)
+### Criação do ambiente Conda
 
-# Uso
+```bash
+conda create -n aemet-opendata python=3.13.5 pandas tqdm requests
+conda activate aemet-opendata
+```
 
-Os scripts em Python 3.13.5 permitem automatizar a obtenção das seguintes variáveis:
+> 💡 As demais bibliotecas utilizadas fazem parte da biblioteca padrão do Python.
 
--> Radiação Global (GL) em 10 * kj/m²
+---
 
--> Radiação Difusa (DF) em 10 * kj/m²
+## 📦 Bibliotecas Utilizadas
 
--> Radiação Direta (DT) em 10 * kj/m²
+Além das dependências instaladas via conda, os scripts utilizam:
 
--> Insolação (Sol) em horas
+* `datetime`
+* `argparse`
+* `requests`
+* `pandas`
+* `time`
+* `json`
+* `sys`
+* `os`
 
-**Primeiro Passo:** Criar o arquivo key.txt
+---
 
-Antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link: https://opendata.aemet.es/centrodedescargas/inicio
+## 🔑 Configuração da Chave de Acesso (API Key)
 
-Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt criado pelo usuário.
+Antes de executar qualquer script, é necessário criar uma **chave de acesso pessoal** para a API da AEMET.
 
-Atenção: Colar entre aspas a chave na variável key nesse formato:
+### Passo 1: Gerar a chave
 
-key = " "
+Acesse o portal oficial da AEMET OpenData:
 
-OBS: o arquivo key.txt deve está dentro da mesma pasta do projeto, ou seja, dentro da pasta aemet-opendata
+👉 [https://opendata.aemet.es/centrodedescargas/inicio](https://opendata.aemet.es/centrodedescargas/inicio)
 
-**Segundo Passo:** Criar o arquivo todas_estacoes.csv
+Siga as instruções do site para gerar sua chave.
 
-Assim como no passo anterior, este arquivo já está incluído no repositório caso você tenha feito o clone do projeto.
+### Passo 2: Criar o arquivo `key.txt`
 
-Alguns scripts utilizam este arquivo para gerar as saídas contendo código da estação, nome, latitude, longitude e altitude.
+Na pasta raiz do projeto (`aemet-opendata/`), crie um arquivo chamado `key.txt` com o seguinte conteúdo:
 
-Caso você não tenha o arquivo, basta executar o script aemet_inventory_stations.py. Ele fará a requisição à API da AEMET e criará automaticamente o arquivo todas_estacoes.csv com todas as estações disponíveis via API.
+```python
+key = "SUA_CHAVE_AQUI"
+```
 
-**Terceiro Passo:** Executar os downloads
+⚠️ **Importante:**
 
-- aemet_inventory_stations.py
+* A chave deve estar **entre aspas**
+* O arquivo `key.txt` deve estar **no mesmo diretório dos scripts**
 
-Script que baixa o inventário de todas as estações da AEMET. Os dados são armazenados em arquivos CSV com as seguintes colunas:
-provincia, latitud, longitud, altitud, indicativo, nombre, indsinop
+---
 
-Exemplo de uso
->> python aemet_inventory_stations.py
+## 🗺️ Inventário de Estações
 
-- aemet_insolation_history.py
-  
-Algoritmo para baixar histórico diário de insolação da AEMET para todas as estações.
+O projeto utiliza o arquivo `todas_estacoes.csv`, que contém o inventário completo das estações disponíveis na API da AEMET.
 
-Faz uso de argumentos de linha de comando para definir o ano, datas inicial e final, tamanho da janela de dias para cada requisição, e arquivo de saída.
+### Gerando o inventário
 
-Exemplo de uso:
->> python aemet_insolation_history.py  **(Default --ano 2024 e --janela 14)**
->> python aemet_insolation_history.py --ano 2023
->> python aemet_insolation_history.py --datai 2023-01-01 --dataf 2023-03-31
->> python aemet_insolation_history.py --ano 2025 --janela 7
+Caso o arquivo não exista, basta executar:
 
-Se usuário usar somente o argumento **--ano**, o script baixa dados de 1º de janeiro até 31 de dezembro daquele ano.
+```bash
+python aemet_inventory_stations.py
+```
 
-Se usar **--datai** e/ou **--dataf**, o script baixa dados entre essas datas.
+O script irá consultar a API da AEMET e gerar automaticamente o arquivo `todas_estacoes.csv` com as seguintes colunas:
 
-O argumento **--janela** define quantos dias cada requisição abrange (padrão 14). Isso devido a limitações da API da AEMET.
+* `provincia`
+* `latitud`
+* `longitud`
+* `altitud`
+* `indicativo`
+* `nombre`
+* `indsinop`
 
-O arquivo de saída padrão é 'dataset_daily/insolacao_diaria_ANO.csv', onde ANO é o ano especificado. Se a pasta dataset_daily não existir, será criada automáticamente.
+---
 
-- aemet_insolation_pipeline.py
+## ▶️ Uso dos Scripts
 
-Pipeline para processar os arquivos consolidados de insolação diária da AEMET. Lê os arquivos CSV na pasta 'dataset_daily', separa os dados por estação, e salva arquivos individuais para cada estação em subpastas organizadas por ano.
+### 1️⃣ Inventário de Estações
 
-Requer a pasta 'dataset_daily' com os arquivos CSV baixados previamente pelo script **aemet_insolation_history.py**.
+```bash
+python aemet_inventory_stations.py
+```
 
-Exemplo de uso
->> python aemet_insolação_pipeline.py
+Baixa e atualiza o inventário completo de estações meteorológicas da AEMET.
 
-# Referencias
+---
 
--Para mais informações sobre o serviço OpenData da AEMET, consulte:
-👉 https://opendata.aemet.es
+### 2️⃣ Histórico Diário de Insolação
+
+Script: `aemet_insolation_history.py`
+
+Realiza o download do **histórico diário de insolação** para todas as estações disponíveis.
+
+#### Argumentos disponíveis
+
+* `--ano` → Ano desejado (padrão: `2024`)
+* `--datai` → Data inicial (`YYYY-MM-DD`)
+* `--dataf` → Data final (`YYYY-MM-DD`)
+* `--janela` → Número de dias por requisição (padrão: `14`)
+
+> ℹ️ A limitação de janela existe devido às restrições da API da AEMET.
+
+#### Exemplos de uso
+
+```bash
+# Ano completo (padrão)
+python aemet_insolation_history.py
+
+# Ano específico
+python aemet_insolation_history.py --ano 2023
+
+# Intervalo de datas
+python aemet_insolation_history.py --datai 2023-01-01 --dataf 2023-03-31
+
+# Ajustando a janela de requisição
+python aemet_insolation_history.py --ano 2025 --janela 7
+```
+
+📂 **Saída padrão:**
+
+Os arquivos são salvos em:
+
+```text
+dataset_daily/insolacao_diaria_ANO.csv
+```
+
+Caso a pasta `dataset_daily` não exista, ela será criada automaticamente.
+
+---
+
+### 3️⃣ Pipeline de Organização da Insolação
+
+Script: `aemet_insolation_pipeline.py`
+
+Processa os arquivos consolidados de insolação diária presentes na pasta `dataset_daily`:
+
+* Lê os CSVs anuais
+* Separa os dados por estação
+* Salva arquivos individuais organizados por **ano** e **estação**
+
+#### Execução
+
+```bash
+python aemet_insolation_pipeline.py
+```
+
+⚠️ **Pré-requisito:**
+
+* A pasta `dataset_daily` deve conter os arquivos gerados pelo script `aemet_insolation_history.py`
+
+---
+
+## 📚 Referências
+
+* Serviço OpenData da AEMET: 👉 [https://opendata.aemet.es](https://opendata.aemet.es)
+
+---
+
+## 🤝 Contribuições
+
+Sugestões, correções e melhorias são bem-vindas!
+
+Sinta-se à vontade para abrir uma **issue** ou enviar um **pull request**.
+
+---
+
+## 📄 Licença
+
+Este projeto é distribuído para fins acadêmicos e científicos. Consulte os termos de uso do **OpenData AEMET** para restrições adicionais sobre redistribuição dos dados.
