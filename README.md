@@ -37,12 +37,13 @@ Os scripts em Python 3.13.9 permitem automatizar a obtenção das seguintes vari
 
 - Primeiro Passo: Criar o arquivo key.txt
 
-Se você fizer o clone deste projeto, o arquivo key.txt já estará disponível, portanto não será necessário criá-lo novamente.
+Antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link: https://opendata.aemet.es/centrodedescargas/inicio
 
-Contudo, antes de usar os scripts, o usuário precisa gerar sua própria chave (key) no seguinte link:
-https://opendata.aemet.es/centrodedescargas/inicio
+Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt criado pelo usuário.
 
-Siga as instruções do site para gerar a chave e, em seguida, cole o valor obtido na variável key dentro do arquivo key.txt fornecido no projeto.
+Atenção: Colar entre aspas a chave na variável key nesse formato:
+
+key = " "
 
 - Segundo Passo: Criar o arquivo todas_estacoes.csv
 
