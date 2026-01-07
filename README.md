@@ -1,6 +1,6 @@
 # 🌞 AEMET-OPENDATA
 
-Projeto desenvolvido para **automatizar o download, organização e processamento de dados de radiação solar e insolação** das estações radiométricas operadas pela **Agência Estatal de Meteorologia da Espanha (AEMET)**, utilizando o serviço **OpenData** oficial.
+Projeto desenvolvido para **automatizar o download, organização e processamento de dados de radiação solar e insolação** das estações radiométricas operadas pela **Agência Estatal de Meteorologia da Espanha (AEMET)**, utilizando o serviço **API** oficial.
 
 ---
 
@@ -60,7 +60,7 @@ conda activate aemet-opendata
 
 ## 📦 Bibliotecas Utilizadas
 
-Além das dependências instaladas via conda, os scripts utilizam:
+Todas dependências que os scripts utilizam:
 
 * `datetime`
 * `argparse`
@@ -126,17 +126,7 @@ O script irá consultar a API da AEMET e gerar automaticamente o arquivo `todas_
 
 ## ▶️ Uso dos Scripts
 
-### 1️⃣ Inventário de Estações
-
-```bash
-python aemet_inventory_stations.py
-```
-
-Baixa e atualiza o inventário completo de estações meteorológicas da AEMET.
-
----
-
-### 2️⃣ Histórico Diário de Insolação
+### Histórico Diário de Insolação
 
 Script: `aemet_insolation_history.py`
 
@@ -154,7 +144,7 @@ Realiza o download do **histórico diário de insolação** para todas as estaç
 #### Exemplos de uso
 
 ```bash
-# Ano completo (padrão)
+# Ano padrão é 2024 e janela 14 dias
 python aemet_insolation_history.py
 
 # Ano específico
@@ -179,7 +169,7 @@ Caso a pasta `dataset_daily` não exista, ela será criada automaticamente.
 
 ---
 
-### 3️⃣ Pipeline de Organização da Insolação
+### Pipeline de Organização da Insolação
 
 Script: `aemet_insolation_pipeline.py`
 
@@ -214,7 +204,3 @@ Sugestões, correções e melhorias são bem-vindas!
 Sinta-se à vontade para abrir uma **issue** ou enviar um **pull request**.
 
 ---
-
-## 📄 Licença
-
-Este projeto é distribuído para fins acadêmicos e científicos. Consulte os termos de uso do **OpenData AEMET** para restrições adicionais sobre redistribuição dos dados.
