@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+Docstring for aemet_insolação_pipeline
+Pipeline para processar os arquivos consolidados de insolação diária da AEMET.
+Lê os arquivos CSV na pasta 'dataset_daily', separa os dados por estação,
+e salva arquivos individuais para cada estação em subpastas organizadas por ano.
+
+Requer a pasta 'dataset_daily' com os arquivos CSV baixados previamente pelo
+script 'aemet_insolation_history.py'.
+
+Exemplo de uso:
+python aemet_insolação_pipeline.py
+"""
 # Biliotecas necessárias
 
 import os

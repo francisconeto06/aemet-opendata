@@ -1,4 +1,27 @@
 # -*- coding: utf-8 -*-
+"""
+Algoritmo para baixar histórico diário de insolação da AEMET para todas
+as estações.
+
+Faz uso de argumentos de linha de comando para definir o ano, datas inicial e
+final, tamanho da janela de dias para cada requisição, e arquivo de saída.
+
+Requer um arquivo 'key.txt' com a chave de API no formato:
+key = "SUA_CHAVE_AQUI"
+
+Exemplo de uso:
+python aemet_insolation_history.py --ano 2023
+python aemet_insolation_history.py --datai 2023-01-01 --dataf 2023-03-31
+python aemet_insolation_history.py --ano 2025 --janela 7
+
+Se usuário usar somente o argumento --ano, o script baixa dados de 1º de
+janeiro até 31 de dezembro daquele ano.
+
+Se usar --datai e/ou --dataf, o script baixa dados entre essas datas.
+
+O argumento --janela define quantos dias cada requisição abrange (padrão 14).
+Isso devido a limitações da API da AEMET.
+"""
 # Bibliotecas necessárias
 
 import argparse

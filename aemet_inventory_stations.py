@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+Script que baixa o inventário de todas as estações da AEMET.
+
+Os dados são armazenados em arquivos CSV com as seguintes colunas:
+
+provincia, latitud, longitud, altitud, indicativo, nombre, indsinop
+
+"""
 # Bibliotecas
 
 import pandas as pd
