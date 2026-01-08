@@ -4,12 +4,6 @@ Projeto para **automatizar o download, a organização e o processamento de dado
 
 ---
 
-## Visão Geral
-
-O AEMET-OPENDATA fornece scripts reprodutíveis para coleta de dados meteorológicos em **tempo quase real** e **séries históricas consolidadas**, com foco em variáveis radiométricas e insolação. O projeto foi estruturado para facilitar a manutenção, a expansão e a integração em pipelines de análise científica.
-
----
-
 ## Funcionalidades
 
 O projeto permite a obtenção automatizada das seguintes variáveis:
@@ -217,7 +211,7 @@ Esse script é pensado para executar com contrab.
 #### Exemplo de crontab
 
 ```bash
-0 12,14,16,18,20,22 * * * /home/$USER/anaconda3/envs/gl_verification/bin/python /home/$USER/Documentos/projetos/aemet-opendata/aemet_real_time_radiation.py >> /home/$USER/logs/aemet_radiation.log 2>&1
+0 12,14,16,18,20,22 * * * /home/$USER/anaconda3/envs/aemet-opendata/bin/python /home/$USER/Documentos/projetos/aemet-opendata/aemet_real_time_radiation.py >> /home/$USER/logs/aemet_radiation.log 2>&1
 ```
 Neste caso, o processo é executado diariamente às 12h, 14h, 16h, 18h, 20h e 22h. As múltiplas execuções foram definidas para mitigar a indisponibilidade ou incompletude de dados em determinados horários, garantindo maior cobertura e consistência das informações coletadas.
 
