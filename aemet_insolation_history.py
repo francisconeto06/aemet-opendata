@@ -23,7 +23,8 @@ O argumento --janela define quantos dias cada requisição abrange (padrão 14).
 Isso devido a limitações da API da AEMET.
 
 O arquivo de saída padrão é 'dataset_daily/insolacao_diaria_ANO.csv',
-onde ANO é o ano especificado.
+onde ANO é o ano especificado. Caso usou --datai e/ou --dataf, o arquivo
+será nomeado como 'dataset_daily/insolacao_diaria_DATAI_DATAF.csv
 """
 # Bibliotecas necessárias
 
