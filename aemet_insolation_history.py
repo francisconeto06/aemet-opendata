@@ -21,6 +21,9 @@ Se usar --datai e/ou --dataf, o script baixa dados entre essas datas.
 
 O argumento --janela define quantos dias cada requisição abrange (padrão 14).
 Isso devido a limitações da API da AEMET.
+
+O arquivo de saída padrão é 'dataset_daily/insolacao_diaria_ANO.csv', 
+onde ANO é o ano especificado.
 """
 # Bibliotecas necessárias
 
@@ -198,6 +201,21 @@ def processar_janela(data_atual, data_limite, args, api_key):
     return data_atual + timedelta(days=args.janela)
 
 
+def definir_saida(args, data_atual, data_limite):
+    # Prioridade total para --saida
+    if args.saida is not None:
+        return args.saida
+
+    # Caso use intervalo de datas
+    if args.datai or args.dataf:
+        datai_str = data_atual.strftime("%Y-%m-%d")
+        dataf_str = data_limite.strftime("%Y-%m-%d")
+        return f"dataset_daily/insolacao_diaria_{datai_str}_{dataf_str}.csv"
+
+    # Caso use apenas ano
+    return f"dataset_daily/insolacao_diaria_{args.ano}.csv"
+
+
 def main():
     parser = argparse.ArgumentParser(description="Insolacao diária AEMET")
 
@@ -220,11 +238,14 @@ def main():
 
     args = parser.parse_args()
 
-    if args.saida is None:
-        args.saida = f"dataset_daily/insolacao_diaria_{args.ano}.csv"
+    #if args.saida is None:
+    #    args.saida = f"dataset_daily/insolacao_diaria_{args.ano}.csv"
 
     api_key = carregar_api_key()
     data_atual, data_limite = configurar_datas(args)
+    
+    # Define corretamente o arquivo de saída
+    args.saida = definir_saida(args, data_atual, data_limite)
 
     imprimir_cabecalho(args, data_atual, data_limite)
 
