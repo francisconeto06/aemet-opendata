@@ -22,7 +22,7 @@ Se usar --datai e/ou --dataf, o script baixa dados entre essas datas.
 O argumento --janela define quantos dias cada requisição abrange (padrão 14).
 Isso devido a limitações da API da AEMET.
 
-O arquivo de saída padrão é 'dataset_daily/insolacao_diaria_ANO.csv', 
+O arquivo de saída padrão é 'dataset_daily/insolacao_diaria_ANO.csv',
 onde ANO é o ano especificado.
 """
 # Bibliotecas necessárias
@@ -238,12 +238,12 @@ def main():
 
     args = parser.parse_args()
 
-    #if args.saida is None:
-    #    args.saida = f"dataset_daily/insolacao_diaria_{args.ano}.csv"
+    # if args.saida is None:
+    #     args.saida = f"dataset_daily/insolacao_diaria_{args.ano}.csv"
 
     api_key = carregar_api_key()
     data_atual, data_limite = configurar_datas(args)
-    
+
     # Define corretamente o arquivo de saída
     args.saida = definir_saida(args, data_atual, data_limite)
 
