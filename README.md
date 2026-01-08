@@ -198,6 +198,29 @@ Pré-requisito: a pasta `dataset_daily` deve conter os arquivos gerados pelo scr
 
 ---
 
+### Download real-time
+
+Script: aemet_real_time_radiation.py
+
+Download e atualização diária de dados de radiação solar da AEMET.
+
+Os dados são armazenados em arquivos CSV únicos por estação, no formato: date, hora, GL, DF, DT
+
+A cada execução:
+- Se a data não existir no arquivo, ela é adicionada
+- Se a data existir:
+    - Valores existentes não são sobrescritos
+    - Apenas colunas faltantes (NaN) são preenchidas
+
+Esse script é pensado para executar com contrab. 
+
+#### Exemplo de crontab
+
+```bash
+0 12,14,16,18,20,22 * * * /home/$USER/anaconda3/envs/gl_verification/bin/python /home/$USER/Documentos/projetos/aemet-opendata/aemet_real_time_radiation.py >> /home/$USER/logs/aemet_radiation.log 2>&1
+```
+Neste caso, o processo é executado diariamente às 12h, 14h, 16h, 18h, 20h e 22h. As múltiplas execuções foram definidas para mitigar a indisponibilidade ou incompletude de dados em determinados horários, garantindo maior cobertura e consistência das informações coletadas.
+
 ## Referências
 
 * AEMET OpenData: [https://opendata.aemet.es](https://opendata.aemet.es)
